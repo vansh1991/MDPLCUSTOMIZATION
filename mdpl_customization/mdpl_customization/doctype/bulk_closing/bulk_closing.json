@@ -20,7 +20,8 @@
    "fieldname": "reference_document",
    "fieldtype": "Link",
    "label": "Reference Document",
-   "options": "DocType"
+   "options": "DocType",
+   "read_only": 1
   },
   {
    "fieldname": "item",
@@ -60,7 +61,7 @@
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2023-04-07 13:16:00.649647",
+ "modified": "2023-04-07 13:34:41.958106",
  "modified_by": "Administrator",
  "module": "MDPL Customization",
  "name": "Bulk Closing",
