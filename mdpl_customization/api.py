@@ -36,10 +36,43 @@ def get_all_customers():
 		"state": "Submit"
 		}
 		} 
-	url = "https://mdpltest.cloud.mattermost.com/api/v4/actions/dialogs/open"
+	url = "https://chat.mdpl.org.in/api/v4/actions/dialogs/open"
 	headers = {
 		'Content-Type': 'application/json'
 	}
 
 	response = requests.request("POST", url, headers=headers, data=json.dumps(dict_data))
 	frappe.local.response.update(json.loads(response.text))
+
+@frappe.whitelist(allow_guest=True)
+def validate_sales_order(self,method=None):
+	if self.customer:
+		# frappe.msgprint(str(frappe.get_roles()))
+		get_role=frappe.db.get_single_value('Selling Settings', 'role_permmission')
+		if not get_role in frappe.get_roles():
+			from frappe.utils import today
+			from frappe.utils import date_diff
+			get_invoice_list=frappe.db.sql(f"select name,posting_date from `tabSales Invoice` where customer='{self.customer}' and is_return=0",as_dict=1)
+			if get_invoice_list:
+				for name_inv in get_invoice_list:
+					# frappe.msgprint(str(name_inv))
+					get_payment_entry=frappe.db.sql(f"select parent from `tabPayment Entry Reference` where reference_name='{name_inv.name}'",as_dict=1)
+					if get_payment_entry:
+						pass
+						# for payment in get_payment_entry:
+						# 	get_payment=frappe.db.get_value("Paymment Entry",)
+					else:
+						posting_d=name_inv.posting_date
+						cur_date=today()
+						total_diff=date_diff(cur_date, posting_d)
+						if total_diff > frappe.db.get_value("Customer",{"name":self.customer},"payment_days"):
+							frappe.throw(f"You are Not Able to Submit the Order Payment is Not Cleared against {name_inv.name}")
+
+@frappe.whitelist()
+def submit_sales_order(name):
+	if name:
+
+		get_doc_data=frappe.get_doc("Sales Order",name)
+		get_doc_data.flags.ignore_permissions=True
+		get_doc_data.submit()
+		frappe.db.commit()

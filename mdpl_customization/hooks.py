@@ -31,7 +31,9 @@ app_license = "MIT"
 # page_js = {"page" : "public/js/file.js"}
 
 # include js in doctype views
-# doctype_js = {"doctype" : "public/js/doctype.js"}
+doctype_js = {
+	"Sales Order" : "public/js/sales_order.js"
+	}
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
@@ -98,6 +100,12 @@ app_license = "MIT"
 doc_events = {
 	"Purchase Receipt": {
 		"before_save": "mdpl_customization.utils.update_receipt"
+	},
+	"Sales Order": {
+		"on_submit": "mdpl_customization.api.validate_sales_order"
+	},
+	"Credit Limit Approval":{
+		"on_submit": "mdpl_customization.api.submit_sales_order"
 	}
 }
 
