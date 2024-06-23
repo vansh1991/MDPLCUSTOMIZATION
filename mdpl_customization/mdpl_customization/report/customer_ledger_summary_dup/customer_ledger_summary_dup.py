@@ -124,17 +124,17 @@ class PartyLedgerSummaryReport(object):
 			},
 		]
 
-		for account in self.party_adjustment_accounts:
-			columns.append(
-				{
-					"label": account,
-					"fieldname": "adj_" + scrub(account),
-					"fieldtype": "Currency",
-					"options": "currency",
-					"width": 120,
-					"is_adjustment": 1,
-				}
-			)
+		# for account in self.party_adjustment_accounts:
+		# 	columns.append(
+		# 		{
+		# 			"label": account,
+		# 			"fieldname": "adj_" + scrub(account),
+		# 			"fieldtype": "Currency",
+		# 			"options": "currency",
+		# 			"width": 120,
+		# 			"is_adjustment": 1,
+		# 		}
+		# 	)
 
 		columns += [
 			{
@@ -184,13 +184,22 @@ class PartyLedgerSummaryReport(object):
 		
 		columns += [
 			{
-				"label": _("Total Amount"),
+				"label": _("Average Ageing Days"),
 				"fieldname": "total_amount",
-				"fieldtype": "Currency",
-				"options": "currency",
+				"fieldtype": "Data",
+				"options": "Data",
 				"width": 120,
 			}
 		]
+
+		# columns += [
+		# 	{
+		# 		"label": _("Outstanding Days"),
+		# 		"fieldname": "ageing",
+		# 		"fieldtype": "Data",
+		# 		"width": 120,
+		# 	}
+		# ]
 
 		return columns
 
@@ -226,6 +235,7 @@ class PartyLedgerSummaryReport(object):
 				self.party_data[gle.party].update({"supplier_group": self.supplier_group.get(gle.party)})
 
 			amount = gle.get(invoice_dr_or_cr) - gle.get(reverse_dr_or_cr)
+			# frappe.log_error("amount",amount)
 			self.party_data[gle.party].closing_balance += amount
 
 			if gle.posting_date < self.filters.from_date or gle.is_opening == "Yes":
@@ -259,14 +269,38 @@ class PartyLedgerSummaryReport(object):
 				from frappe.utils import getdate
 				start_date=self.filters.get("from_date")
 				end_date=self.filters.get("to_date")
-				ageing=start_date-end_date
+				# ageing=start_date-end_date
+				ageing=end_date-start_date
 				day=ageing.days
+				# frappe.log_error("invoiced_amount",row)
 				if row.get("invoiced_amount") > 0:
-					row.total_amount=((row.get("opening_balance")+row.get("closing_balance")/2))/row.get("invoiced_amount")*(day+1)
+					t_amount=float(row.get("invoiced_amount")) - row.get("return_amount")
+					open_close=row.get("opening_balance")+row.get("closing_balance")
+					if t_amount > 0:
+						if open_close > 0:
+							row.total_amount= round( (((open_close)/2)/t_amount)*(day-1),2)
+						else:
+							row.total_amount=open_close
+					else:
+						row.total_amount=t_amount
+						# if t_amount > 0:
+						# 	open_am=((row.get("opening_balance")+row.get("closing_balance"))/2)
+						# 	if open_am> 0:
+						# 		row.total_amount=(t_amount/open_am)*(day+1) #((t_amount) /
+						# 	else:
+						# 		row.total_amount=0
+						# # if t_amount > 0:
+						
+						# else:
+						# 	row.total_amount=0
+
+						# [( total bill amount - credit note)/ (opening + closing balance)/2)] * ( To date - From date +1)
+					# 	row.ageing=day+1
+				else:
+					row.total_amount=0
 
 				out.append(row)
-		frappe.log_error("filter",self.filters)
-		frappe.log_error("out",out)
+				# frappe.log_error("row",row)
 		return out
 
 	def get_gl_entries(self):

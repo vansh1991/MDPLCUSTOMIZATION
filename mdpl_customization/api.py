@@ -52,7 +52,7 @@ def validate_sales_order(self,method=None):
 		if not get_role in frappe.get_roles():
 			from frappe.utils import today
 			from frappe.utils import date_diff
-			get_invoice_list=frappe.db.sql(f"select name,posting_date from `tabSales Invoice` where customer='{self.customer}' and is_return=0",as_dict=1)
+			get_invoice_list=frappe.db.sql(f"select name,posting_date from `tabSales Invoice` where customer='{self.customer}' and is_return=0 and status != 'Cancelled'",as_dict=1)
 			if get_invoice_list:
 				for name_inv in get_invoice_list:
 					# frappe.msgprint(str(name_inv))
@@ -76,3 +76,21 @@ def submit_sales_order(name):
 		get_doc_data.flags.ignore_permissions=True
 		get_doc_data.submit()
 		frappe.db.commit()
+
+@frappe.whitelist()
+def validate_payment_entry(self,method=None):
+	from frappe import utils
+	if self.workflow_state == "Cheque Deposited":
+		if self.posting_date:
+			frappe.db.set_value("Payment Entry",self.name,"posting_date",utils.today())
+		# else:
+		# 	frappe.db.set_value("Payment Entry",self.name,"posting_date",utils.today())
+		self.reload()
+
+
+
+@frappe.whitelist(allow_guest=True)
+def get_hdfc_log(**kwargs):
+	if kwargs:
+		frappe.log_error("Kwargs",kwargs)
+		return kwargs

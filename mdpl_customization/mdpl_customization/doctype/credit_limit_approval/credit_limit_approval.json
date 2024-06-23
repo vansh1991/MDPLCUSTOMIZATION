@@ -11,25 +11,30 @@
   "doc_name",
   "user",
   "approved_by",
-  "amended_from"
+  "amended_from",
+  "from_sales_order",
+  "update_credit_limit"
  ],
  "fields": [
   {
    "fieldname": "doc_type",
    "fieldtype": "Link",
    "label": "Doc Type",
+   "mandatory_depends_on": "eval: doc.from_sales_order == false",
    "options": "DocType"
   },
   {
    "fieldname": "doc_name",
    "fieldtype": "Dynamic Link",
    "label": "Doc Name",
+   "mandatory_depends_on": "eval: doc.from_sales_order == false",
    "options": "doc_type"
   },
   {
    "fieldname": "user",
    "fieldtype": "Link",
    "label": "User",
+   "mandatory_depends_on": "eval: doc.from_sales_order == false",
    "options": "User"
   },
   {
@@ -46,12 +51,27 @@
    "options": "Credit Limit Approval",
    "print_hide": 1,
    "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "from_sales_order",
+   "fieldtype": "Check",
+   "hidden": 1,
+   "label": "from_sales_order",
+   "read_only": 1
+  },
+  {
+   "depends_on": "eval: doc.from_sales_order == false",
+   "fieldname": "update_credit_limit",
+   "fieldtype": "Float",
+   "label": "Update Credit Limit",
+   "mandatory_depends_on": "eval: doc.from_sales_order == false"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2023-10-31 02:06:56.169681",
+ "modified": "2024-01-24 03:37:25.353924",
  "modified_by": "Administrator",
  "module": "MDPL Customization",
  "name": "Credit Limit Approval",

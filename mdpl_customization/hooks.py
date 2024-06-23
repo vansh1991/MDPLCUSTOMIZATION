@@ -34,6 +34,10 @@ app_license = "MIT"
 doctype_js = {
 	"Sales Order" : "public/js/sales_order.js"
 	}
+
+permission_query_conditions = {
+	"Issue": "mdpl_customization.utils.issue_query"
+}
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
@@ -103,6 +107,9 @@ doc_events = {
 	},
 	"Sales Order": {
 		"on_submit": "mdpl_customization.api.validate_sales_order"
+	},
+	"Payment Entry": {
+		"on_update": "mdpl_customization.api.validate_payment_entry"
 	},
 	"Credit Limit Approval":{
 		"on_submit": "mdpl_customization.api.submit_sales_order"
