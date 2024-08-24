@@ -140,18 +140,51 @@ class Gstr1Report(object):
                     if taxable_value:
                         # account_list=frappe.db.get_all("Sales Taxes and Charges",{"parent":})
                         # frappe.log_error("row",row)
-                        row.append(
-                            frappe.db.get_value("Sales Taxes and Charges",{"parent":row[2],"account_head":"Output Tax CGST - MDPL"},"tax_amount")
+
+                        # row.append(
+                        #     frappe.db.get_value("Sales Taxes and Charges",{"parent":row[4],"account_head":"Output Tax CGST - MDPL"},"tax_amount")
                             
-						)
-                        row.append(
-                           frappe.db.get_value("Sales Taxes and Charges",{"parent":row[2],"account_head":"Output Tax SGST - MDPL"},"tax_amount")
+						# )
+                        tax_value = frappe.db.get_value(
+                            "Sales Taxes and Charges",
+                            {"parent": row[4], "account_head": "Output Tax CGST - MDPL"},
+                            "tax_amount"
+                        )
+                       
+                        if tax_value is not None:
+                            tax_value = abs(tax_value)
+                        else:
+                            tax_value = 0
+                        row.append(abs(tax_value))
+                        # row.append(
+                        #    frappe.db.get_value("Sales Taxes and Charges",{"parent":row[4],"account_head":"Output Tax SGST - MDPL"},"tax_amount")
                             
-						)
-                        row.append(
-                            frappe.db.get_value("Sales Taxes and Charges",{"parent":row[2],"account_head":"Output Tax IGST - MDPL"},"tax_amount")
+						# )
+                        tax_value = frappe.db.get_value(
+                            "Sales Taxes and Charges",
+                            {"parent": row[4], "account_head": "Output Tax SGST - MDPL"},
+                            "tax_amount"
+                        )
+                        if tax_value is not None:
+                            tax_value = abs(tax_value)
+                        else:
+                            tax_value = 0
+                        row.append(abs(tax_value))
+                        # row.append(
+                        #     frappe.db.get_value("Sales Taxes and Charges",{"parent":row[4],"account_head":"Output Tax IGST - MDPL"},"tax_amount")
                             
-						)
+						# )
+                        tax_value = frappe.db.get_value(
+                            "Sales Taxes and Charges",
+                            {"parent": row[4], "account_head": "Output Tax IGST - MDPL"},
+                            "tax_amount"
+                        )
+                        if tax_value is not None:
+                            tax_value = abs(tax_value)
+                        else:
+                            tax_value = 0
+
+                        row.append(abs(tax_value))
                         
                         
                         # frappe.log_error("row",row)
@@ -461,6 +494,9 @@ class Gstr1Report(object):
 
         elif self.filters.get("type_of_business") == "CDNR-REG":
             conditions += """ AND (is_return = 1 OR is_debit_note = 1) AND IFNULL(gst_category, '') not in ('Unregistered', 'Overseas')"""
+            
+        elif self.filters.get("type_of_business") == "CDNR-REG":
+            conditions += """ AND (is_return = 1 OR is_debit_note = 0) AND IFNULL(gst_category, '') not in ('Unregistered', 'Overseas')""" #changes    
 
         elif self.filters.get("type_of_business") == "CDNR-UNREG":
             conditions += """ AND ifnull(SUBSTR(place_of_supply, 1, 2),'') != ifnull(SUBSTR(company_gstin, 1, 2),'')
