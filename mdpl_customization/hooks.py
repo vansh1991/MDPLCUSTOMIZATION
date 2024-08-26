@@ -113,7 +113,13 @@ doc_events = {
 	},
 	"Credit Limit Approval":{
 		"on_submit": "mdpl_customization.api.submit_sales_order"
-	}
+	},
+	"Journal Entry":{
+		"on_update_after_submit":"mdpl_customization.utils.make_gl_entries"
+	},
+	# "HDFC Payment":{
+	# 	"after_insert":"mdpl_customization.utils.get_payment_request"
+	# }
 }
 
 # Scheduled Tasks

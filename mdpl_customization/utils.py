@@ -75,3 +75,46 @@ def validate_return_against(doc):
 						doc.return_against
 					)
 				)
+
+
+from erpnext.accounts.utils import (
+	cancel_exchange_gain_loss_journal,
+	get_account_currency,
+	get_balance_on,
+	get_stock_accounts,
+	get_stock_and_account_balance,
+)
+
+@frappe.whitelist()
+def make_gl_entries(self,method=None):
+
+	# get_all_pre_gl=frappe.db.get_all("GL Entry",filters={"voucher_type":"Journal Entry","voucher_no":self.name},fileds=["name"])
+	# if get_all_pre_gl:
+	# 	for gl in get_all_pre_gl:
+	# 		frappe
+	frappe.db.delete("GL Entry", {
+		"voucher_type":"Journal Entry","voucher_no":self.name
+	})
+
+	cancel=0 
+	adv_adj=0
+	from erpnext.accounts.general_ledger import make_gl_entries
+
+	merge_entries = frappe.db.get_single_value("Accounts Settings", "merge_similar_account_heads")
+
+	gl_map = self.build_gl_map()
+	if self.voucher_type in ("Deferred Revenue", "Deferred Expense"):
+		update_outstanding = "No"
+	else:
+		update_outstanding = "Yes"
+
+	if gl_map:
+		make_gl_entries(
+			gl_map,
+			cancel=cancel,
+			adv_adj=adv_adj,
+			merge_entries=merge_entries,
+			update_outstanding=update_outstanding,
+		)
+		if cancel:
+			cancel_exchange_gain_loss_journal(frappe._dict(doctype=self.doctype, name=self.name))

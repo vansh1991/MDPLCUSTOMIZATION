@@ -1,4 +1,4 @@
-# Copyright (c) 2022, vansh and contributors
+# Copyright (c) 2024, vansh and contributors
 # For license information, please see license.txt
 
 # import frappe
