@@ -78,13 +78,12 @@ def submit_sales_order(name):
 		frappe.db.commit()
 
 @frappe.whitelist()
-def validate_payment_entry(self,method=None):
+def validate_payment_entry(self, method=None):
 	from frappe import utils
-	if self.workflow_state == "Cheque Deposited":
+	workflow_state = getattr(self, 'workflow_state', None)
+	if workflow_state == "Cheque Deposited":
 		if self.posting_date:
-			frappe.db.set_value("Payment Entry",self.name,"posting_date",utils.today())
-		# else:
-		# 	frappe.db.set_value("Payment Entry",self.name,"posting_date",utils.today())
+			frappe.db.set_value("Payment Entry", self.name, "posting_date", utils.today())
 		self.reload()
 
 ##HDFC Integrattion Part
