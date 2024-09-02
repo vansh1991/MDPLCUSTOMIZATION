@@ -80,7 +80,7 @@ frappe.query_reports["sales invoice script report"] = {
         "fieldname": "apple_id",
         "label": "Apple Id",
         "fieldtype": "Check",
-        "default": 0,
+        "default": 1,
     
     }, 
 

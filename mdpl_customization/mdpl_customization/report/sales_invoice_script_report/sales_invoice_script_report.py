@@ -148,9 +148,45 @@ def execute(filters=None):
         frappe.logger().error(f"Error executing query: {e}")
         raise
     
-    
-    if filters.get("itm_group"):
+
+    if filters.get("itm_group") and filters.get("apple_id") is None and len(filters.get('customer')) == 0 :
         all_customer = frappe.db.sql("""SELECT name AS customer FROM `tabCustomer`""", as_dict=True)
+        
+        for customer_row in all_customer:
+            if customer_row.get("customer") not in [customer.get("customer") for customer in data]:
+                data.append(customer_row)
+
+    if filters.get("itm_group") and filters.get("apple_id") is not None and len(filters.get('customer')) == 0:
+        all_customer = frappe.db.sql("""SELECT name AS customer FROM `tabCustomer` WHERE apple_id > 1""", as_dict=True)
+        
+        for customer_row in all_customer:
+            if customer_row.get("customer") not in [customer.get("customer") for customer in data]:
+                data.append(customer_row)
+
+
+    if len(filters.get("itm_group")) == 0 and filters.get("apple_id") is not None and len(filters.get('customer')) == 0 and len(filters.get('parent_item_group')) == 0:
+        all_customer = frappe.db.sql("""SELECT name AS customer FROM `tabCustomer` WHERE apple_id > 1""", as_dict=True)
+        
+        for customer_row in all_customer:
+            if customer_row.get("customer") not in [customer.get("customer") for customer in data]:
+                data.append(customer_row)
+
+    if len(filters.get("itm_group")) == 0 and filters.get("apple_id") is None and len(filters.get('customer')) == 0 and len(filters.get('parent_item_group')) == 0:
+        all_customer = frappe.db.sql("""SELECT name AS customer FROM `tabCustomer`""", as_dict=True)
+        
+        for customer_row in all_customer:
+            if customer_row.get("customer") not in [customer.get("customer") for customer in data]:
+                data.append(customer_row)
+
+    if len(filters.get("itm_group")) == 0 and filters.get("apple_id") is None and len(filters.get('customer')) == 0 and len(filters.get('parent_item_group')) > 0:
+        all_customer = frappe.db.sql("""SELECT name AS customer FROM `tabCustomer`""", as_dict=True)
+        
+        for customer_row in all_customer:
+            if customer_row.get("customer") not in [customer.get("customer") for customer in data]:
+                data.append(customer_row)
+
+    if len(filters.get("itm_group")) == 0 and filters.get("apple_id") is not None and len(filters.get('customer')) == 0 and len(filters.get('parent_item_group')) > 0:
+        all_customer = frappe.db.sql("""SELECT name AS customer FROM `tabCustomer` WHERE apple_id > 1""", as_dict=True)
         
         for customer_row in all_customer:
             if customer_row.get("customer") not in [customer.get("customer") for customer in data]:
