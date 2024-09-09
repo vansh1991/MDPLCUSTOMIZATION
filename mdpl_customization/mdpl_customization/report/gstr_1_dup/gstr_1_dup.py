@@ -111,7 +111,8 @@ class Gstr1Report(object):
         elif self.filters.get("type_of_business") == "Document Issued Summary":
             self.get_documents_issued_data()
         elif self.filters.get("type_of_business") == "HSN":
-            self.data = get_hsn_data(self.filters, self.columns, self.gst_accounts)
+            self.data = get_hsn_data(self.filters, self.columns)
+            # self.data = get_hsn_data(self.filters, self.columns, self.gst_accounts)
         elif self.invoices:
             for inv, items_based_on_rate in self.items_based_on_tax_rate.items():
                 invoice_details = self.invoices.get(inv)
@@ -124,10 +125,12 @@ class Gstr1Report(object):
                         "CDNR-REG",
                         "CDNR-UNREG",
                     ):
+                        
                         # for Unregistered invoice, skip if B2CS
                         if self.filters.get(
                             "type_of_business"
                         ) == "CDNR-UNREG" and not self.is_b2cl_cdn(invoice_details):
+                            
                             continue
 
                         row.append(
@@ -140,6 +143,7 @@ class Gstr1Report(object):
                     if taxable_value:
                         # account_list=frappe.db.get_all("Sales Taxes and Charges",{"parent":})
                         # frappe.log_error("row",row)
+                        # frappe.msgprint(f"row{row},======taxable value{taxable_value}")
                         row.append(
                             frappe.db.get_value("Sales Taxes and Charges",{"parent":row[2],"account_head":"Output Tax CGST - MDPL"},"tax_amount")
                             
@@ -300,9 +304,9 @@ class Gstr1Report(object):
 
             for key, value in b2c_output.items():
                 # frappe.log_error("value",value)
-                # value.update({"cgst": frappe.db.get_value("Sales Taxes and Charges",{"parent":value.get("invoice_number"),"account_head":"Output Tax CGST - MDPL"},"tax_amount")})
-                # value.update({"sgst": frappe.db.get_value("Sales Taxes and Charges",{"parent":value.get("invoice_number"),"account_head":"Output Tax SGST - MDPL"},"tax_amount")})
-                # value.update({"igst": frappe.db.get_value("Sales Taxes and Charges",{"parent":value.get("invoice_number"),"account_head":"Output Tax IGST - MDPL"},"tax_amount")})
+                value.update({"cgst": frappe.db.get_value("Sales Taxes and Charges",{"parent":value.get("invoice_number"),"account_head":"Output Tax CGST - MDPL"},"tax_amount")})
+                value.update({"sgst": frappe.db.get_value("Sales Taxes and Charges",{"parent":value.get("invoice_number"),"account_head":"Output Tax SGST - MDPL"},"tax_amount")})
+                value.update({"igst": frappe.db.get_value("Sales Taxes and Charges",{"parent":value.get("invoice_number"),"account_head":"Output Tax IGST - MDPL"},"tax_amount")})
                 self.data.append(value)
 
     def is_b2cl_cdn(self, invoice):
@@ -1194,7 +1198,7 @@ class Gstr1Report(object):
                 },
             ]
         elif self.filters.get("type_of_business") == "HSN":
-            self.columns = get_hsn_columns()
+            self.columns = get_hsn_columns(self.filters)
             return
 
         
