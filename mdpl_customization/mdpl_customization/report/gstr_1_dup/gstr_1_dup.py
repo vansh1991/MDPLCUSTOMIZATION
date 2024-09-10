@@ -101,6 +101,178 @@ class Gstr1Report(object):
 
         return self.columns, self.data
 
+    # def get_data(self):
+    #     if self.filters.get("type_of_business") in ("B2C Small", "B2C Large"):
+    #         self.get_b2c_data()
+    #     elif self.filters.get("type_of_business") in ("Advances", "Adjustment"):
+    #         self.get_11A_11B_data()
+    #     elif self.filters.get("type_of_business") == "NIL Rated":
+    #         self.get_nil_rated_invoices()
+    #     elif self.filters.get("type_of_business") == "Document Issued Summary":
+    #         self.get_documents_issued_data()
+    #     elif self.filters.get("type_of_business") == "HSN":
+    #         self.data = get_hsn_data(self.filters, self.columns)
+    #         # self.data = get_hsn_data(self.filters, self.columns, self.gst_accounts)
+    #     elif self.invoices:
+    #         for inv, items_based_on_rate in self.items_based_on_tax_rate.items():
+    #             invoice_details = self.invoices.get(inv)
+    #             for rate, items in items_based_on_rate.items():
+    #                 row, taxable_value = self.get_row_data_for_invoice(
+    #                     inv, invoice_details, rate, items
+    #                 )
+    #                 frappe.msgprint(f"row:{row},taxable_value:{taxable_value}========")
+
+    #                 if self.filters.get("type_of_business") in (
+    #                     "CDNR-REG",
+    #                     "CDNR-UNREG",
+    #                 ):
+                        
+    #                     # for Unregistered invoice, skip if B2CS
+    #                     if self.filters.get(
+    #                         "type_of_business"
+    #                     ) == "CDNR-UNREG" and not self.is_b2cl_cdn(invoice_details):
+                            
+    #                         continue
+
+    #                     row.append(
+    #                         "Y"
+    #                         if invoice_details.posting_date <= date(2017, 7, 1)
+    #                         else "N"
+    #                     )
+    #                     row.append("C" if invoice_details.is_return else "D")
+
+    #                 if taxable_value and self.filters.get("type_of_business") == "CDNR-REG":
+                        
+    #                     # account_list=frappe.db.get_all("Sales Taxes and Charges",{"parent":})
+    #                     # frappe.log_error("row",row)
+                      
+    #                     # row.append(
+    #                     #     frappe.db.get_value("Sales Taxes and Charges",{"parent":row[4],"account_head":"Output Tax CGST - MDPL"},"tax_amount")
+                            
+	# 					# )
+    #                     tax_value = frappe.db.get_value(
+    #                         "Sales Taxes and Charges",
+    #                         {"parent": row[4], "account_head": "Output Tax CGST - MDPL"},
+    #                         "tax_amount"
+    #                     )
+                       
+    #                     if tax_value is not None:
+    #                         tax_value = abs(tax_value)
+    #                     else:
+    #                         tax_value = 0
+    #                     row.append(abs(tax_value))
+
+    #                     # row.append(
+    #                     #    frappe.db.get_value("Sales Taxes and Charges",{"parent":row[4],"account_head":"Output Tax SGST - MDPL"},"tax_amount")
+                            
+	# 					# )
+    #                     tax_value = frappe.db.get_value(
+    #                         "Sales Taxes and Charges",
+    #                         {"parent": row[4], "account_head": "Output Tax SGST - MDPL"},
+    #                         "tax_amount"
+    #                     )
+    #                     if tax_value is not None:
+    #                         tax_value = abs(tax_value)
+    #                     else:
+    #                         tax_value = 0
+    #                     row.append(abs(tax_value))
+
+    #                     # row.append(
+    #                     #     frappe.db.get_value("Sales Taxes and Charges",{"parent":row[4],"account_head":"Output Tax IGST - MDPL"},"tax_amount")
+                            
+	# 					# )
+
+    #                     tax_value = frappe.db.get_value(
+    #                         "Sales Taxes and Charges",
+    #                         {"parent": row[4], "account_head": "Output Tax IGST - MDPL"},
+    #                         "tax_amount"
+    #                     )
+    #                     if tax_value is not None:
+    #                         tax_value = abs(tax_value)
+    #                     else:
+    #                         tax_value = 0
+
+    #                     row.append(abs(tax_value))
+                        
+                        
+    #                     # frappe.log_error("row",row)
+    #                     self.data.append(row)
+
+    #                 if taxable_value and self.filters.get("type_of_business") == "CDNR-UNREG":
+    #                     # account_list=frappe.db.get_all("Sales Taxes and Charges",{"parent":})
+    #                     # frappe.log_error("row",row)
+                      
+    #                     # row.append(
+    #                     #     frappe.db.get_value("Sales Taxes and Charges",{"parent":row[4],"account_head":"Output Tax CGST - MDPL"},"tax_amount")
+                            
+	# 					# )
+    #                     tax_value = frappe.db.get_value(
+    #                         "Sales Taxes and Charges",
+    #                         {"parent": row[3], "account_head": "Output Tax CGST - MDPL"},
+    #                         "tax_amount"
+    #                     )
+                       
+    #                     if tax_value is not None:
+    #                         tax_value = abs(tax_value)
+    #                     else:
+    #                         tax_value = 0
+    #                     row.append(abs(tax_value))
+
+    #                     # row.append(
+    #                     #    frappe.db.get_value("Sales Taxes and Charges",{"parent":row[4],"account_head":"Output Tax SGST - MDPL"},"tax_amount")
+                            
+	# 					# )
+    #                     tax_value = frappe.db.get_value(
+    #                         "Sales Taxes and Charges",
+    #                         {"parent": row[3], "account_head": "Output Tax SGST - MDPL"},
+    #                         "tax_amount"
+    #                     )
+    #                     if tax_value is not None:
+    #                         tax_value = abs(tax_value)
+    #                     else:
+    #                         tax_value = 0
+    #                     row.append(abs(tax_value))
+
+    #                     # row.append(
+    #                     #     frappe.db.get_value("Sales Taxes and Charges",{"parent":row[4],"account_head":"Output Tax IGST - MDPL"},"tax_amount")
+                            
+	# 					# )
+
+    #                     tax_value = frappe.db.get_value(
+    #                         "Sales Taxes and Charges",
+    #                         {"parent": row[3], "account_head": "Output Tax IGST - MDPL"},
+    #                         "tax_amount"
+    #                     )
+    #                     if tax_value is not None:
+    #                         tax_value = abs(tax_value)
+    #                     else:
+    #                         tax_value = 0
+
+    #                     row.append(abs(tax_value))
+                        
+                        
+    #                     # frappe.log_error("row",row)
+    #                     self.data.append(row)
+
+    #                 else:
+    #                     if taxable_value:
+    #                         row.append(
+    #                         frappe.db.get_value("Sales Taxes and Charges",{"parent":row[2],"account_head":"Output Tax CGST - MDPL"},"tax_amount")
+                            
+	# 					)
+    #                     row.append(
+    #                        frappe.db.get_value("Sales Taxes and Charges",{"parent":row[2],"account_head":"Output Tax SGST - MDPL"},"tax_amount")
+                            
+	# 					)
+    #                     row.append(
+    #                         frappe.db.get_value("Sales Taxes and Charges",{"parent":row[2],"account_head":"Output Tax IGST - MDPL"},"tax_amount")
+                            
+	# 					)
+                        
+                        
+    #                     # frappe.log_error("row",row)
+    #                     self.data.append(row)
+
     def get_data(self):
         if self.filters.get("type_of_business") in ("B2C Small", "B2C Large"):
             self.get_b2c_data()
@@ -112,54 +284,52 @@ class Gstr1Report(object):
             self.get_documents_issued_data()
         elif self.filters.get("type_of_business") == "HSN":
             self.data = get_hsn_data(self.filters, self.columns)
-            # self.data = get_hsn_data(self.filters, self.columns, self.gst_accounts)
         elif self.invoices:
+            processed_rows = set()  # To keep track of processed rows
+            
             for inv, items_based_on_rate in self.items_based_on_tax_rate.items():
                 invoice_details = self.invoices.get(inv)
+                # frappe.msgprint(f"invoice_details:{invoice_details},invoice_details=======")
                 for rate, items in items_based_on_rate.items():
-                    row, taxable_value = self.get_row_data_for_invoice(
-                        inv, invoice_details, rate, items
-                    )
-
-                    if self.filters.get("type_of_business") in (
-                        "CDNR-REG",
-                        "CDNR-UNREG",
-                    ):
-                        
-                        # for Unregistered invoice, skip if B2CS
-                        if self.filters.get(
-                            "type_of_business"
-                        ) == "CDNR-UNREG" and not self.is_b2cl_cdn(invoice_details):
-                            
-                            continue
-
-                        row.append(
-                            "Y"
-                            if invoice_details.posting_date <= date(2017, 7, 1)
-                            else "N"
-                        )
-                        row.append("C" if invoice_details.is_return else "D")
-
+                    row, taxable_value = self.get_row_data_for_invoice(inv, invoice_details, rate, items)
+                    # frappe.msgprint(f"row:{row},taxable_value:{taxable_value}========")
+                    
                     if taxable_value:
-                        # account_list=frappe.db.get_all("Sales Taxes and Charges",{"parent":})
-                        # frappe.log_error("row",row)
-                        # frappe.msgprint(f"row{row},======taxable value{taxable_value}")
-                        row.append(
-                            frappe.db.get_value("Sales Taxes and Charges",{"parent":row[2],"account_head":"Output Tax CGST - MDPL"},"tax_amount")
-                            
-						)
-                        row.append(
-                           frappe.db.get_value("Sales Taxes and Charges",{"parent":row[2],"account_head":"Output Tax SGST - MDPL"},"tax_amount")
-                            
-						)
-                        row.append(
-                            frappe.db.get_value("Sales Taxes and Charges",{"parent":row[2],"account_head":"Output Tax IGST - MDPL"},"tax_amount")
-                            
-						)
+                        # Create a unique identifier for the row to avoid duplicates
+                        row_id = tuple(row)  # Convert row to a tuple (hashable type)
                         
+                        # Check if the row is already processed
+                        if row_id in processed_rows:
+                            continue
                         
-                        # frappe.log_error("row",row)
+                        if self.filters.get("type_of_business") in ("CDNR-REG", "CDNR-UNREG"):
+                        #     # For Unregistered invoice, skip if B2CS
+                        #     if self.filters.get("type_of_business") == "CDNR-UNREG" and not self.is_b2cl_cdn(invoice_details):
+                        #         frappe.msgprint(f"---------is_b2cl_cdn-----yes")
+                        #         continue
+                            
+                            row.append("Y" if invoice_details.posting_date <= date(2017, 7, 1) else "N")
+                            row.append("C" if invoice_details.is_return else "D")
+
+                        if self.filters.get("type_of_business") == "CDNR-REG":
+                            row = self.append_tax_amounts(row, row[4])
+                        elif self.filters.get("type_of_business") == "CDNR-UNREG":
+                            row = self.append_tax_amounts(row, row[3])
+                        else:
+                            row = self.append_tax_amounts(row, row[2])
+
+                        # Add to processed rows and append the row to self.data
+                        processed_rows.add(row_id)
                         self.data.append(row)
+
+    def append_tax_amounts(self, row, parent):
+        """Helper method to append tax amounts to the row."""
+        tax_fields = ["Output Tax CGST - MDPL", "Output Tax SGST - MDPL", "Output Tax IGST - MDPL"]
+        for tax_field in tax_fields:
+            tax_value = frappe.db.get_value("Sales Taxes and Charges", {"parent": parent, "account_head": tax_field}, "tax_amount")
+            row.append(abs(tax_value) if tax_value is not None else 0)
+        return row
+
 
     def get_nil_rated_invoices(self):
         nil_exempt_output = [
@@ -218,21 +388,32 @@ class Gstr1Report(object):
         if self.invoices:
             frappe.log_error("invoices",self.invoices)
             # frappe.log_error("self.items_based_on_tax_rate.items()",self.items_based_on_tax_rate.items())
+            total_cgst = 0
+            total_sgst = 0
+            total_igst = 0
             for inv, items_based_on_rate in self.items_based_on_tax_rate.items():
                 frappe.log_error("inv",inv)
+                
                 invoice_details = self.invoices.get(inv)
                 # frappe.log_error("invoice_details",invoice_details)
-
 
                 # for B2C Small, skip if B2CL CDN
                 if self.filters.get(
                     "type_of_business"
                 ) == "B2C Small" and self.is_b2cl_cdn(invoice_details):
                     continue
+                
+
+                total_cgst += frappe.db.get_value("Sales Taxes and Charges",{"parent":inv,"account_head":"Output Tax CGST - MDPL"},"tax_amount") or 0
+                total_sgst += frappe.db.get_value("Sales Taxes and Charges",{"parent":inv,"account_head":"Output Tax SGST - MDPL"},"tax_amount") or 0
+                total_igst += frappe.db.get_value("Sales Taxes and Charges",{"parent": inv, "account_head":"Output Tax IGST - MDPL"}, "tax_amount") or 0
+                
+
 
                 for rate, items in items_based_on_rate.items():
                     # frappe.log_error("items",items)
                     # frappe.log_error("items_based_on_rate.items()",items_based_on_rate.items())
+                   
                     place_of_supply = invoice_details.get("place_of_supply")
                     ecommerce_gstin = invoice_details.get("ecommerce_gstin")
                     invoice_number = invoice_details.get("invoice_number")
@@ -253,6 +434,7 @@ class Gstr1Report(object):
                             "rate": rate,
                             "taxable_value": 0,
                             "cess_amount": 0,
+                            
                             "type": "",
                             "invoice_number": invoice_number,
                             "posting_date": invoice_details.get(
@@ -270,6 +452,7 @@ class Gstr1Report(object):
                             "rate": rate,
                             "taxable_value": 0,
                             "cess_amount": 0,
+                            
                             "type": "",
                             "invoice_number": invoice_number,
                             "posting_date": invoice_details.get(
@@ -280,6 +463,7 @@ class Gstr1Report(object):
                     )
 
                     row = b2c_output.get(default_key)
+                    
                     row["taxable_value"] += sum(
                         [
                             net_amount
@@ -300,13 +484,19 @@ class Gstr1Report(object):
                     )
                     row["type"] = "E" if ecommerce_gstin else "OE"
 
+                   
+
             frappe.log_error("b2c_output",b2c_output)
 
+            
+        
+
             for key, value in b2c_output.items():
-                # frappe.log_error("value",value)
-                value.update({"cgst": frappe.db.get_value("Sales Taxes and Charges",{"parent":value.get("invoice_number"),"account_head":"Output Tax CGST - MDPL"},"tax_amount")})
-                value.update({"sgst": frappe.db.get_value("Sales Taxes and Charges",{"parent":value.get("invoice_number"),"account_head":"Output Tax SGST - MDPL"},"tax_amount")})
-                value.update({"igst": frappe.db.get_value("Sales Taxes and Charges",{"parent":value.get("invoice_number"),"account_head":"Output Tax IGST - MDPL"},"tax_amount")})
+                value.update({"cgst":total_cgst,"sgst":total_sgst,"igst":total_igst})
+            #     frappe.log_error("value",value)
+            #     value.update({"cgst": frappe.db.get_value("Sales Taxes and Charges",{"parent":value.get("invoice_number"),"account_head":"Output Tax CGST - MDPL"},"tax_amount")})
+            #     value.update({"sgst": frappe.db.get_value("Sales Taxes and Charges",{"parent":value.get("invoice_number"),"account_head":"Output Tax SGST - MDPL"},"tax_amount")})
+            #     value.update({"igst": frappe.db.get_value("Sales Taxes and Charges",{"parent":value.get("invoice_number"),"account_head":"Output Tax IGST - MDPL"},"tax_amount")})
                 self.data.append(value)
 
     def is_b2cl_cdn(self, invoice):
@@ -339,6 +529,7 @@ class Gstr1Report(object):
                     abs(invoice_details.base_rounded_total)
                     or abs(invoice_details.base_grand_total)
                 )
+                
             elif fieldname == "invoice_value":
                 row.append(
                     invoice_details.base_rounded_total
