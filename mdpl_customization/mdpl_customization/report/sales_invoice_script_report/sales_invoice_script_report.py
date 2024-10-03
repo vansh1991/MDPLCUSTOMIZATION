@@ -16,7 +16,7 @@ def execute(filters=None):
         'iPad Pro 5th gen', 'Ipad 9th gen', 'iPad 10th gen',
         'Ipad Air 5th gen', 'Ipad pro 4th gen', 'iPad Pro 3rd Gen', '(Accessories)',
         'Watch SE 2', 'Watch 8', 'WATCH Ultra', 'Watch 9', 'WATCH Ultra 2',
-        'Mac Air M2', 'Mac Air M3'
+        'Mac Air M2', 'Mac Air M3','16' , '16 Plus' , '16 Pro' , '16 Pro Max','AirPod 4','Series 10'
     ]
 
     # Initialize selected_item_groups
@@ -27,15 +27,15 @@ def execute(filters=None):
         if 'Macbook' in filters['parent_item_group']:
             selected_item_groups += ['Mac Air M2', 'Mac Air M3']
         if 'AirPods' in filters['parent_item_group']:
-            selected_item_groups += ['Airpod 2', 'Airpod 3', 'Airpod Pro', 'Airpod Pro2']
+            selected_item_groups += ['Airpod 2', 'Airpod 3', 'Airpod Pro', 'Airpod Pro2','AirPod 4']
         if 'iPhone' in filters['parent_item_group']:
-            selected_item_groups += ['11', '12', '13', '14', '14 Plus', '14 Pro', '14 Pro Max', '15', '15 Plus', '15 Pro', '15 Pro Max']
+            selected_item_groups += ['11', '12', '13', '14', '14 Plus', '14 Pro', '14 Pro Max', '15', '15 Plus', '15 Pro', '15 Pro Max','16' , '16 Plus' , '16 Pro' , '16 Pro Max']
         if 'iPad' in filters['parent_item_group']:
             selected_item_groups += ['iPad Air 6th gen', 'iPad Pro 5th gen', 'Ipad 9th gen', 'iPad 10th gen', 'Ipad Air 5th gen', 'Ipad pro 4th gen', 'iPad Pro 3rd Gen']
         if 'Accessories' in filters['parent_item_group']:
             selected_item_groups += ['(Accessories)']
         if 'Apple Watch' in filters['parent_item_group']:
-            selected_item_groups += ['Watch SE 2', 'Watch 8', 'WATCH Ultra', 'Watch 9', 'WATCH Ultra 2']
+            selected_item_groups += ['Watch SE 2', 'Watch 8', 'WATCH Ultra', 'Watch 9', 'WATCH Ultra 2','Series 10']
         
     # If itm_group is selected, prioritize itm_group over parent_item_group
     if filters.get('itm_group'):
